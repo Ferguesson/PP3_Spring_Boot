@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        /* Чередующиеся цвета для строк таблицы */
+        tbody tr:nth-child(odd) {
+            background-color: #f9f9f9; /* Светло-серый для нечетных строк */
+        }
+        tbody tr:nth-child(even) {
+            background-color: #ffffff; /* Белый для четных строк */
+        }
+        tbody tr:hover {
+            background-color: #d1e7fd; /* Цвет при наведении на строку */
+        }
+    </style>
+</head>
+<body>
+<div>
+    <th:block th:each="msg : ${messages}">
+        <h1 th:text="${msg}"></h1>
+    </th:block>
+
+    <h2>User List</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.email}"></td>
+            <td>
+                <!-- Удаление пользователя -->
+                <form action="#" th:action="@{/deleteUser}" method="post">
+                    <input type="hidden" th:name="userId" th:value="${user.id}"/>
+                    <button type="submit">Delete</button>
+                </form>
+
+                <!-- Форма редактирования пользователя -->
+                <form action="#" th:action="@{/updateUser}" method="post">
+                    <input type="hidden" th:name="id" th:value="${user.id}"/>
+                    <input type="text" th:name="firstName" th:value="${user.firstName}" required placeholder="First Name"/>
+                    <input type="text" th:name="lastName" th:value="${user.lastName}" required placeholder="Last Name"/>
+                    <input type="email" th:name="email" th:value="${user.email}" required placeholder="Email"/>
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Add User</h2>
+    <form action="#" th:action="@{/addUser}" method="post">
+        <input type="text" name="firstName" placeholder="First Name" required/>
+        <input type="text" name="lastName" placeholder="Last Name" required/>
+        <input type="email" name="email" placeholder="Email" required/>
+        <button type="submit">Add User</button>
+    </form>
+
+    <h2>Clear Users</h2>
+    <form action="#" th:action="@{/clearUsers}" method="post">
+        <button type="submit">Clear All Users</button>
+    </form>
+</div>
+</body>
+</html>
